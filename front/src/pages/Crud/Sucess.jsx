@@ -9,7 +9,7 @@ function Buttons(props) {
         const handleShow = () => setShow(true);
     return (
         <div style={{margin:'5px'}}>
-           <Button variant="success" onClick={handleShow}>
+           <Button variant="success" value={props.value} onClick={handleShow}>
              Update
             </Button>
       

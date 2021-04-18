@@ -5,14 +5,15 @@ function Delete(props) {
         const [show, setShow] = useState(false);
       
         const handleClose = () => setShow(false);
-        const handleShow = () => setShow(true);
+        const handleShow = (e) =>{
+          console.log(e.target.value)
+         setShow(true);}
       
         return (
           <>
-            <Button variant="danger" onClick={handleShow}>
+            <Button variant="danger" value={props.value} onClick={e=>handleShow(e)}>
              Delete
-            </Button>
-      
+            </Button> 
             <Modal show={show} onHide={handleClose} backdrop="static"
         keyboard={false}>
               <Modal.Header closeButton>

@@ -1,8 +1,41 @@
 import React, {useState} from 'react';
 import {Form,Col,Container,Button,Modal} from 'react-bootstrap';
 function Adduser(props) {
-  const [smShow, setSmShow] = useState(false);
+  const [image,setimage]=useState()
+  const [name,setname]=useState()
+  const [last_name,setlastname]=useState()
+  const [age,setage]=useState()
+  const [room,setroom]=useState()
+  const [doctor,setdoctor]=useState()
+  const [num,setnum]=useState()
+
+
+
+
   const [lgShow, setLgShow] = useState(false);
+  const onChange = (e)=>{
+    let file = e.target.files
+    let reader= new FileReader()
+  reader.readAsDataURL(file[0])
+  reader.onload=(e)=>{
+      setimage(e.target.result)
+    }
+
+    }
+
+    const handleclick= ()=>{
+      const formdata={
+        name:name,
+        picture : image,
+        last_name:last_name,
+        room:room,
+        doctor:doctor,
+        num:num,
+        age:age
+      }
+      console.log(formdata)
+    }
+  
     return (
       <>
       <Button onClick={() => setLgShow(true)}>Add User</Button>
@@ -15,7 +48,6 @@ function Adduser(props) {
       >
         <Modal.Header closeButton>
           <Modal.Title id="example-modal-sizes-title-lg">
-
           Add User 
           </Modal.Title>
         </Modal.Header>
@@ -26,39 +58,47 @@ function Adduser(props) {
   <Form.Row style={{marginTop:'5%'}}>
     <Col>
     <Form.Label>First Name</Form.Label>
-      <Form.Control placeholder="First name" onChange={(e) => console.log(e)}/>
+      <Form.Control value={name} placeholder="First name" onChange={(e) => setname(e.target.value)}/>
     </Col>
     <Col>
     <Form.Label>Last Name</Form.Label>
-      <Form.Control placeholder="Last name" />
+      <Form.Control placeholder="Last name" onChange={(e) => setlastname(e.target.value)}/>
     </Col>
     <Col>
     <Form.Label>Ages</Form.Label>
-      <Form.Control placeholder="Age" onChange={(e) => console.log(e)}/>
+      <Form.Control placeholder="Age" onChange={(e) => setage(e.target.value)}/>
     </Col>
   </Form.Row>
   <Form.Row style={{marginTop:'5%'}}>
     
     <Col>
     <Form.Label>Room</Form.Label>
-      <Form.Control placeholder="Room" />
+      <Form.Control placeholder="Room" onchage={e=>setroom(e.target.value)}/>
     </Col>
     <Col>
     <Form.Label>Doctor</Form.Label>
-      <Form.Control placeholder="Doctor" onChange={(e) => console.log(e)}/>
+      <Form.Control placeholder="Doctor" onChange={(e) => setdoctor(e.target.value)}/>
+    </Col>
+    <Col>
+    <Form.Label>num</Form.Label>
+      <Form.Control placeholder="num" onChange={(e) => setnum(e.target.value)}/>
     </Col>
     </Form.Row>
+    
 
-    <Form.Row style={{marginTop:'5%'}}>
+    <Form.Row style={{marginTop:'10%'}}>
+    <Form.Label>Choose a ptient picture</Form.Label>
+    </Form.Row>
+    <Form.Row >
+
     <Form.File id="formcheck-api-regular">
-      <Form.File.Label>patient picture</Form.File.Label>
-      <Form.File.Input />
+      <input type='file' name='image' onChange={e => onChange(e)}/>    
     </Form.File>
     </Form.Row>
   
 </Form>
 <div style={{marginBottom:'5%',marginTop:'5%',marginLeft:'45%'}}>
-<Button>Submit</Button>
+<Button onClick={handleclick}>Submit</Button>
 </div>
 </Container>
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,53 +10,43 @@ import Paper from '@material-ui/core/Paper';
 import Buttons from './Buttons';
 import {Button} from 'react-bootstrap'
 import {useHistory} from 'react-router-dom'
+
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
 });
 
-const rows=[
-    { name:'azre',lastname:'zaeza',age:'48',room:'22',doctor:'sd', id:133321 },
-    { name:'azre',lastname:'zaeza',age:'48',room:'22',doctor:'sd', id:185511 },
-    { name:'azre',lastname:'zaeza',age:'48',room:'22',doctor:'sd', id:151511 },
-    { name:'azre',lastname:'zaeza',age:'48',room:'22',doctor:'sd', id:225122 },
-    { name:'azre',lastname:'zaeza',age:'48',room:'22',doctor:'sd', id:515561 },
-    { name:'azre',lastname:'zaeza',age:'48',room:'22',doctor:'sd', id:133321 },
-    { name:'azre',lastname:'zaeza',age:'48',room:'22',doctor:'sd', id:185511 },
-    { name:'azre',lastname:'zaeza',age:'48',room:'22',doctor:'sd', id:151511 },
-    { name:'azre',lastname:'zaeza',age:'48',room:'22',doctor:'sd', id:225122 },
-    { name:'azre',lastname:'zaeza',age:'48',room:'22',doctor:'sd', id:515561 },
-    { name:'azre',lastname:'zaeza',age:'48',room:'22',doctor:'sd', id:133321 },
-    { name:'azre',lastname:'zaeza',age:'48',room:'22',doctor:'sd', id:185511 },
-    { name:'azre',lastname:'zaeza',age:'48',room:'22',doctor:'sd', id:151511 },
-    { name:'azre',lastname:'zaeza',age:'48',room:'22',doctor:'sd', id:225122 },
-    { name:'azre',lastname:'zaeza',age:'48',room:'22',doctor:'sd', id:515561 }, 
-]
+
 
 
 function Info(props) {
     const classes = useStyles();
     const history=useHistory()
-
+   
+    
     return (
+      <>
+      {props.rows.length ===0 ? (
+      <h1>no Patient found</h1>):
+      (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Name</TableCell>
+            <TableCell align="right">ID</TableCell>
+            <TableCell align="right">Name</TableCell>
             <TableCell align="right">LastName</TableCell>
             <TableCell align="right">Age</TableCell>
             <TableCell align="right">Room</TableCell>
             <TableCell align="right">Doctor</TableCell>
 
-
           </TableRow>
         </TableHead>
+        
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
+          {props.rows.map((row) => (
+            <TableRow >
               <TableCell component="th" scope="row">
                 {row.id}
               </TableCell>
@@ -69,13 +59,12 @@ function Info(props) {
               <TableCell align="right">
                 <Buttons/>
               </TableCell>
-              
-
             </TableRow>
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </TableContainer>)}
+    </>
   );
 }
 

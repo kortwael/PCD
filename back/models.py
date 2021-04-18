@@ -6,7 +6,7 @@ app.config['MONGODB_HOST']="mongodb+srv://pcd:pcd123456789@cluster0.5lsgq.mongod
 db=MongoEngine()
 db.init_app(app)
 
-class Patient(db.EmbeddedDocument):
+class Patient(db.Document):
     name = db.StringField()
     lastname = db.StringField()
     room=db.IntField()
@@ -27,7 +27,7 @@ class Patient(db.EmbeddedDocument):
 
 
 class Anomaly(db.Document):
-    patient=db.DictField(db.EmbeddedDocumentField(Patient))
+    patient=db.
     instant=db.DateTimeField()
 
 class Doctors(db.Document):

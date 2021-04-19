@@ -1,35 +1,34 @@
-from flask import  Flask,jsonify
+from flask import Flask,jsonify
 from flask_mongoengine import MongoEngine
 
-app=Flask(__name__)
+app = Flask(__name__)
 app.config['MONGODB_HOST']="mongodb+srv://pcd:pcd123456789@cluster0.5lsgq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-db=MongoEngine()
+db = MongoEngine()
 db.init_app(app)
 
 class Patient(db.Document):
     name = db.StringField()
-    lastname = db.StringField()
+    last_name = db.StringField()
     room=db.IntField()
-    doctor=db.StringField
+    dr=db.StringField()
     age=db.IntField()
-    ID=db.ObjectIdField()
-    picture=db.ImageField()
+    num=db.IntField()
+
     def to_json(self):
         return jsonify({"name": self.name,
-                "last_name": self.lastname,
+                "last_name": self.last_name,
                 'room':self.room,
-                'doctor':self.doctor,
+                'dr':self.dr,
                 'age':self.age,
-                'id':self.id,
-                'picture':self.picture})
+                'num':self.num}
+               )
 
 
 
-
-class Anomaly(db.Document):
-    patient=db.
-    instant=db.DateTimeField()
 
 class Doctors(db.Document):
-    emai=db.EmailField()
+    email=db.EmailField()
     pwd=db.StringField()
+    def tojson(self):
+        return {"pwd": self.pwd,
+                "email": self.email}

@@ -2,7 +2,8 @@ import React from 'react';
 import Container from '@material-ui/core/Container';
 import Navbare from './Navbare'
 import Search from './Search';
-function Crud(props) {
+import Footerr from './Footerr'
+function Crud() {
     return (
       <>
 
@@ -11,6 +12,7 @@ function Crud(props) {
             <Container>
             <Search/>
             </Container>
+            <Footerr/>
             </div>
             </>
     );

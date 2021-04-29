@@ -1,4 +1,4 @@
-import React ,{useEffect, useState}from "react";
+import React from "react";
 import {
   Navbar,
   Form,
@@ -19,9 +19,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Jules from "../assets/jules.jpg";
 import TableRow from "@material-ui/core/TableRow";
 import Grid from "@material-ui/core/Grid";
-import Navbare from './Crud/Navbare'
-import axios from 'axios'
-import { useParams } from "react-router";
 const columns = [
   { id: "date", label: "Pain date", minWidth: 170 },
   { id: "doctor", label: "Doctor", minWidth: 100 },
@@ -64,24 +61,6 @@ const useStylesAv = makeStyles((theme) => ({
   },
 }));
 export default function Client() {
-  const [name,setname]=useState()
-  const[last,setlast]=useState()
-  const[img,setimg]=useState()
-  const {id}=useParams()
-
-  useEffect(()=>{axios.get(`http://127.0.0.1:5000/get_patient/${id}`)
-  .then((response)=>{setname(response.data.name)
-                    setlast(response.data.lastname)
-                    setimg(response.data.img)  
-  })
-
-}
-  
-,[])
-
-
-
-
   const classes = useStyles();
   const classesAv = useStylesAv();
   const [page, setPage] = React.useState(0);
@@ -97,20 +76,33 @@ export default function Client() {
   };
   return (
     <div>
-      <Navbare/>
+      <Navbar bg="primary" variant="dark" expand="lg">
+        <Navbar.Brand href="#home">Logo</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link href="#home">Home</Nav.Link>
+            <Nav.Link href="#link">Pain History</Nav.Link>
+          </Nav>
+          <Form inline>
+            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+            <Button variant="outline-light">Search for a client</Button>
+          </Form>
+        </Navbar.Collapse>
+      </Navbar>
 
       <Grid container spacing={1}>
         <Grid item xs={1} style={{marginLeft:'15%'}}>
           <Avatar
             style={{ marginLeft: "25%", marginTop: "25%" }}
             alt="Remy Sharp"
-            src={img}
+            src={Jules}
             className={classesAv.large}
           />
           </Grid>
           <Grid item xs={3} style={{ marginLeft: "12%", marginTop: "5%",}}>
           <h2 >
-            {name} {last} | ID : {id} 
+            Jules Caeser | ID : 000001 
           </h2>
         </Grid>
       </Grid>

@@ -39,7 +39,6 @@ class Patient(db.Document):
 
 
 
-
 class Doctors(db.Document):
     email=db.EmailField()
     pwd=db.StringField()
@@ -47,7 +46,7 @@ class Doctors(db.Document):
     lastname=db.StringField()
     num=db.IntField()
     spec=db.StringField()
-    def tojson(self):
+    def to_json(self):
         return {"pwd": self.pwd,
                 "email": self.email,
                 "name":self.name,
@@ -56,11 +55,51 @@ class Doctors(db.Document):
                 "spec": self.spec
                 }
 
+class Anomaly(db.Document):
+    patient=db.IntField()
+    show=db.IntField()
+    instant=db.StringField()
+    def to_json():
+        return jsonify ({'patient':patient,
+                         'instant':instant,
+                         'show':show,
+                         })
+
+
 
 @app.route('/')
 def index():
     return 'connected'
 
+@app.route('/get_anomaly', methods=['GET'])
+def get_anomaly():
+        l = []
+        for dr in Anomaly.objects():
+            d = dict()
+            if Patient.objects(num=dr.patient).first():
+                p = Patient.objects(num=dr.patient).first()
+                d['patient']=p.num
+                d['name']=p.name
+                d['last_name']=p.last_name
+                d['room']=p.room
+            d['instance'] = dr.instant
+            d['show'] = dr.show
+            if(d['show']) :
+                l.append(d)
+        return (jsonify({'data': l}), 200)
+
+@app.route('/add_anomaly', methods=['POST'])
+def add_anomaly():
+    compte = json.loads(request.data)
+    anomaly = Anomaly(patient=compte['patient'], instant=compte['instant'],show=compte['show'])
+    anomaly.save()
+    return 'ok'
+
+@app.route('/update_anomaly/<e>',methods=['PUT'])
+def update_anomaly(e):
+    data= json.loads(request.data)
+    p=Anomaly.objects(patient=e).first().update(patient=data['patient'],instant=data['instance'], show=data['show'])
+    return "updated"
 
 @app.route('/add_doctor', methods=['POST'])
 def add_doctor():
@@ -87,7 +126,7 @@ def get_doctor():
     if Doctors.objects(email=compte['email']).first():
         p=Doctors.objects(email=compte['email']).first()
         if check_password_hash(p['pwd'],compte['pwd']):
-            token = jwt.encode(p.tojson(), "secret", algorithm="HS256")
+            token = jwt.encode(p.to_json(), "secret", algorithm="HS256")
             return jsonify(token)
         else :
             return jsonify({"msg": "wrong pwd"})

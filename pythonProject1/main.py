@@ -1,7 +1,6 @@
 import cv2
 from flask import Flask , Response , render_template
 from video import Camera
-cam = cv2.VideoCapture(0)
 app = Flask(__name__)
 
 def stream(camera):
@@ -19,4 +18,4 @@ def main():
     return render_template('index.html')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,port=4000)

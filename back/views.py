@@ -59,11 +59,21 @@ class Anomaly(db.Document):
     patient=db.IntField()
     show=db.IntField()
     instant=db.StringField()
-    def to_json():
-        return jsonify ({'patient':patient,
-                         'instant':instant,
-                         'show':show,
+    def to_json(self):
+        return jsonify ({'patient': self.patient,
+                         'instant': self.instant,
+                         'show': self.show,
                          })
+    
+
+
+
+
+
+
+
+
+
 
 
 
@@ -93,6 +103,7 @@ def add_anomaly():
     compte = json.loads(request.data)
     anomaly = Anomaly(patient=compte['patient'], instant=compte['instant'],show=compte['show'])
     anomaly.save()
+    '''notification'''
     return 'ok'
 
 @app.route('/update_anomaly/<e>',methods=['PUT'])
@@ -118,6 +129,12 @@ def delete_doctor(e):
         return " deleted"
     else:
         return "error"
+
+
+
+
+
+
 
 
 @app.route('/get_doctor', methods=['POST'])

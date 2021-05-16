@@ -6,25 +6,23 @@ from keras_vggface.vggface import VGGFace
 import pickle
 from scipy.spatial import distance
 from keras_vggface import utils
-
-
-
+import requests
+import datetime
+import json
 def get_faces(fr):
     cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
     faces = cascade.detectMultiScale(cv2.cvtColor(fr, cv2.COLOR_BGR2GRAY), 1.1, 7)
     return faces
+
+
 class Camera(object):
     def __init__(self):
         self.video = WebcamVideoStream(src=0).start()
-        with open('faces.pkl', 'rb') as file:
-            self.faces = pickle.load(file)
         self.model=tf.keras.models.load_model('Xception.h5')
         self.vgg =  VGGFace(model='resnet50',include_top=False,input_shape=(224,224,3), pooling='max')
         print(" * Model loaded!")
-
     def __del__(self):
         self.video.stop()
-
     def process(self,x):
         x = tf.keras.preprocessing.image.img_to_array(x)
         x = np.expand_dims(x, axis=0)
@@ -64,7 +62,13 @@ class Camera(object):
             img=cv2.resize(img,(224,224))
             person=self.getperson(img)
             p=self.predict(img)
-            print(p)
+            if p==0:
+                print(p)
+                date=datetime.datetime.now()
+                date=date.strftime("%m/%d/%Y, %H:%M:%S")
+                pload = {'patient': 5,'show':0, 'instant': date}
+                pload=json.dumps(pload)
+                r = requests.post('http://127.0.0.1:5000/add_anomaly', data=pload)
             cv2.putText(frame, person, (x, y), cv2.FONT_HERSHEY_PLAIN, 1.5, (0, 255, 0), 2)
         ret,jpg = cv2.imencode('.jpg', frame)
         data.append(jpg.tobytes())

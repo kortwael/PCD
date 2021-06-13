@@ -6,7 +6,7 @@ import { StyleSheet, View, Text, Alert } from 'react-native'
 import { Appbar, Avatar, Button, DataTable, Searchbar, Badge, Provider, Portal, Modal } from 'react-native-paper';
 
 const profileScreen = ({ navigation, route }) => {
-    const [reload, setReload] = useState(0)
+    const [reload, setReload] = useState(false)
     const [token, setToken] = useState({})
     const [liste, setListe] = useState([])
     const [copie, setCopie] = useState([])
@@ -34,15 +34,11 @@ const profileScreen = ({ navigation, route }) => {
         setCopie(liste.filter(w => w["name"].startsWith(e) || w["last_name"].startsWith(e) || (w["name"] + " " + w["last_name"]).startsWith(e)))
     }
 
-    function handleAnomaly (e) {
-        const formdata ={
-            patient:e.patient,
-            instance:e.instance,
-            show:0,
-          }
-          console.log(e.patient)
-          axios.put(`http://127.0.0.1:5000/update_anomaly/${e.patient}`,formdata).then((response)=>console.log(response))      
-          setReload(1-reload)
+    async function handleAnomaly (e) {
+          console.log(e)
+          const res = await axios.put(`http://127.0.0.1:5000/update_anomaly/${e}`).then((response)=>console.log(response))    
+          console.log(reload)
+          setReload(!reload)
     }
     return (
         <Provider>
@@ -79,7 +75,7 @@ const profileScreen = ({ navigation, route }) => {
                                 {
                                     copie.map(e => {
                                         return (
-                                            <DataTable.Row key={e.id}>
+                                            <DataTable.Row key={e.patient}>
                                                 <DataTable.Cell>{e.name}</DataTable.Cell>
                                                 <DataTable.Cell>{e.last_name}</DataTable.Cell>
                                                 <DataTable.Cell>{e.room}</DataTable.Cell>
@@ -122,7 +118,7 @@ const profileScreen = ({ navigation, route }) => {
                                                     <DataTable.Cell ><Text style={styles.small}>{e.room}</Text></DataTable.Cell>
                                                     <DataTable.Cell><Text style={styles.small}>{e.instance}</Text></DataTable.Cell>
                                                     <DataTable.Cell>
-                                                        <Button mode="contained" style={styles.small} onPress={()=>handleAnomaly(e)}>
+                                                        <Button mode="contained" style={styles.small} onPress={()=>handleAnomaly(e.patient)}>
                                                             Confirm
                                                         </Button>
                                                     </DataTable.Cell>

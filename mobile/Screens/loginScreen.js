@@ -24,7 +24,8 @@ const loginScreen = ({navigation}) => {
             else{
                 navigation.navigate("Profile",res.data)
             }
-        })
+        }).catch(function(err){ console.log(err);}
+        )
     }
 
     return (

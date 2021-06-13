@@ -108,9 +108,8 @@ def add_anomaly():
 
 @app.route('/update_anomaly/<e>',methods=['PUT'])
 def update_anomaly(e):
-    data= json.loads(request.data)
-    p=Anomaly.objects(patient=e).first().update(patient=data['patient'],instant=data['instance'], show=data['show'])
-    return "updated"
+    p=Anomaly.objects(patient=e).first().update(show=0)
+    return jsonify(p)
 
 @app.route('/add_doctor', methods=['POST'])
 def add_doctor():
@@ -144,7 +143,8 @@ def get_doctor():
         p=Doctors.objects(email=compte['email']).first()
         if check_password_hash(p['pwd'],compte['pwd']):
             token = jwt.encode(p.to_json(), "secret", algorithm="HS256")
-            return jsonify(token)
+            return token
+            #return jsonify({"msg":"ok"})
         else :
             return jsonify({"msg": "wrong pwd"})
     else :
@@ -168,7 +168,6 @@ def get_docs():
 def update_doctor(e):
     data = json.loads(request.data)
     p = Doctors.objects(num=e).first().update(name=data['name'],lastname=data['lastname'], num=data['num'], spec=data['spec'])
-
     return jsonify("updated")
 
 
